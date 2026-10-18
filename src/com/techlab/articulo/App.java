@@ -80,14 +80,16 @@ public class App {
     public static void ingresarArticulo(Scanner scanner, ArrayList<Articulo> articulos,
             ArrayList<Categoria> categorias) {
         System.out.println("--- INGRESAR ARTÍCULO ---");
-        System.out.println("1 - Artículo electrónico");
-        System.out.println("2 - Artículo alimenticio");
+        System.out.println("1 - Artículo Electrónico");
+        System.out.println("2 - Artículo Periférico");
+        System.out.println("3 - Artículo Alimenticio");
+        System.out.println("4 - Artículo de Limpieza");
 
         int tipo = 0;
-        while (tipo != 1 && tipo != 2) {
+        while (tipo != 1 && tipo != 2 && tipo != 3 && tipo != 4) {
             tipo = leerEntero(scanner, "Seleccione el tipo de artículo: ");
-            if (tipo != 1 && tipo != 2) {
-                System.out.println("Error: Tipo inválido. Debe seleccionar 1 o 2.");
+            if (tipo != 1 && tipo != 2 && tipo != 3 && tipo != 4) {
+                System.out.println("Error: Tipo inválido. Debe seleccionar 1, 2, 3 o 4.");
             }
         }
 
@@ -117,9 +119,15 @@ public class App {
         if (tipo == 1) {
             int garantia = leerEnteroNoNegativo(scanner, "Ingrese la garantía en meses: ");
             nuevoArticulo = new ArticuloElectronico(codigo, nombre, precio, categoriaSeleccionada, garantia);
-        } else {
+        } else if (tipo == 2) {
+            String tipoConexion = leerTextoNoVacio(scanner, "Ingrese el tipo de conexión del periférico: ");
+            nuevoArticulo = new ArticuloPeriferico(codigo, nombre, precio, categoriaSeleccionada, tipoConexion);
+        } else if (tipo == 3) {
             int diasVenc = leerEnteroNoNegativo(scanner, "Ingrese los días para el vencimiento: ");
             nuevoArticulo = new ArticuloAlimenticio(codigo, nombre, precio, categoriaSeleccionada, diasVenc);
+        } else {
+            String tipoProducto = leerTextoNoVacio(scanner, "Ingrese el tipo de producto de limpieza: ");
+            nuevoArticulo = new ArticuloLimpieza(codigo, nombre, precio, categoriaSeleccionada, tipoProducto);
         }
 
         articulos.add(nuevoArticulo);
@@ -206,6 +214,14 @@ public class App {
             ArticuloAlimenticio alimenticio = (ArticuloAlimenticio) articulo;
             int nuevosDias = leerEnteroNoNegativo(scanner, "Ingrese nuevos días para vencimiento: ");
             alimenticio.setDiasParaVencimiento(nuevosDias);
+        } else if (articulo instanceof ArticuloPeriferico) {
+            ArticuloPeriferico periferico = (ArticuloPeriferico) articulo;
+            String nuevoTipoConexion = leerTextoNoVacio(scanner, "Ingrese el nuevo tipo de conexión: ");
+            periferico.setTipoConexion(nuevoTipoConexion);
+        } else if (articulo instanceof ArticuloLimpieza) {
+            ArticuloLimpieza limpieza = (ArticuloLimpieza) articulo;
+            String nuevoTipoProducto = leerTextoNoVacio(scanner, "Ingrese el nuevo tipo de producto de limpieza: ");
+            limpieza.setTipoProducto(nuevoTipoProducto);
         }
 
         System.out.println("\nArtículo modificado correctamente.");
